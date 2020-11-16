@@ -4,16 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.domain.Article;
 import nju.oasis.serv.domain.CoAuthor;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@Component
 public class CoAuthorProvider extends Provider{
 
     @Resource
-    AuthorDAO authorDAO;
+    private AuthorDAO authorDAO;
 
     private long authorId;
 
@@ -21,15 +23,20 @@ public class CoAuthorProvider extends Provider{
 
     @Override
     public boolean provide(ConcurrentHashMap<String, Object> contextDataMap) {
-        CoAuthor coAuthor = authorDAO.findMostFrequentCoAuthor(authorId,articleIds);
-        if(coAuthor == null){
-            log.warn("[CoAuthorProvider]: authorId:"+ authorId + "may not have coAuthor");
-            articleIds.forEach(item->log.warn("[CoAuthorProvider]: articleIds"+ articleIds.toString() +
-                    "may contain invalid id: "+ item));
+        try {
+            CoAuthor coAuthor = authorDAO.findMostFrequentCoAuthor(authorId, articleIds);
+            if (coAuthor == null) {
+                log.warn("[CoAuthorProvider]: authorId:" + authorId + "may not have coAuthor");
+                articleIds.forEach(item -> log.warn("[CoAuthorProvider]: articleIds" + articleIds.toString() +
+                        "may contain invalid id: " + item));
+                return false;
+            }
+            contextDataMap.put("coAuthor", coAuthor);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
-        contextDataMap.put("coAuthor",coAuthor);
-        return true;
     }
 
     @Override

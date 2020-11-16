@@ -1,11 +1,13 @@
 package nju.oasis.serv.provider;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.concurrent.*;
 
 @Slf4j
+@Component
 public class Pipeline {
     private ConcurrentLinkedQueue<ConcurrentLinkedQueue<Provider>> providerGroupList;
     private ConcurrentHashMap<String, Object> contextDataMap;

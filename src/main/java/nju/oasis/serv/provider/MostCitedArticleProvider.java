@@ -3,30 +3,37 @@ package nju.oasis.serv.provider;
 import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.domain.Article;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@Component
 public class MostCitedArticleProvider extends Provider {
 
     @Resource
-    AuthorDAO authorDAO;
+    private AuthorDAO authorDAO;
 
     private List<Long> articleIds;
 
     @Override
     public boolean provide(ConcurrentHashMap<String, Object> contextDataMap) {
-        Article article = authorDAO.findMaxCitationByIds(articleIds);
-        if(article==null){
-            articleIds.forEach(item->log.warn("[MostCitedArticleProvider]: articleIds"+ articleIds.toString() +
-                    " contain invalid id: "+ item));
-            return false;
+        try {
+            Article article = authorDAO.findMaxCitationByIds(articleIds);
+            if (article == null) {
+                articleIds.forEach(item -> log.warn("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
+                        " contain invalid id: " + item));
+                return false;
 
+            }
+            contextDataMap.put("mostCitedArticle", article);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        contextDataMap.put("mostCitedArticle", article);
-        return true;
     }
 
     @Override
