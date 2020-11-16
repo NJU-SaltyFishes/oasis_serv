@@ -2,6 +2,7 @@ package nju.oasis.serv.service;
 
 import nju.oasis.serv.OasisServApplicationTests;
 import nju.oasis.serv.domain.Article;
+import nju.oasis.serv.domain.CoAuthor;
 import nju.oasis.serv.vo.AuthorRequestForm;
 import nju.oasis.serv.vo.ResponseVO;
 import nju.oasis.serv.vo.ResultCode;
@@ -34,5 +35,9 @@ class AuthorServiceTest extends OasisServApplicationTests {
         Map<String, Object> result = (Map<String, Object>) responseVO.getData();
         assertTrue(result.containsKey("mostCitedArticle"));
         assertTrue(result.containsKey("coAuthor"));
+        Article article = (Article) result.get("mostCitedArticle");
+        CoAuthor coAuthor = (CoAuthor) result.get("coAuthor");
+        assertEquals(Long.valueOf(1000196154),article.getId());
+        assertNotNull(coAuthor);
     }
 }
