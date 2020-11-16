@@ -1,5 +1,6 @@
 package nju.oasis.serv.provider;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.domain.Article;
@@ -10,13 +11,17 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Component
+@NoArgsConstructor
 public class MostCitedArticleProvider extends Provider {
 
-    @Resource
     private AuthorDAO authorDAO;
 
     private List<Long> articleIds;
+
+    public MostCitedArticleProvider(AuthorDAO authorDAO,List<Long>articleIds){
+        this.authorDAO = authorDAO;
+        this.articleIds = articleIds;
+    }
 
     @Override
     public boolean provide(ConcurrentHashMap<String, Object> contextDataMap) {
@@ -39,10 +44,9 @@ public class MostCitedArticleProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         try{
-            if(contextDataMap.get("articleIds")==null){
+            if(articleIds==null){
                 return false;
             }
-            this.articleIds = (List<Long>)contextDataMap.get("articleIds");
         }catch (Exception ex){
             log.warn("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;

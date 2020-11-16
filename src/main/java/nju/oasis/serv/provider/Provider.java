@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
 public abstract class Provider {
     /**
      * 运行provide获取数据存入 contextDataMap
