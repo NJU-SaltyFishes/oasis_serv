@@ -39,20 +39,18 @@ public class CoAuthorProvider extends Provider{
             }
             contextDataMap.put("coAuthor", coAuthor);
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            log.warn("[CoAuthorProvider] error: " + ex.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
-        try{
-            if(articleIds==null||authorId<=0){
-                return false;
-            }
-        }catch (Exception ex){
-            log.warn("[CoAuthorProvider] error: " + ex.getMessage());
+
+        if(articleIds==null||authorId<=0){
+            log.warn("[CoAuthorProvider]:articleIds is null or authorId<0!");
             return false;
         }
         return true;
