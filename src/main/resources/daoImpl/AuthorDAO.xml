@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nju.oasis.serv.dao.AuthorDAO">
+
+
+    <select id="findMaxCitationByIds" resultMap="Article" parameterType="java.util.List">
+        SELECT id,title FROM article WHERE id in
+        <foreach collection="articleIds" index="index" item="item"  separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        ORDER BY citation_count DESC LIMIT 1
+    </select>
+
+    <select id="findMostFrequentCoAuthor" resultMap="CoAuthor">
+        SELECT author_id,count(author_id) as num FROM author_article
+        where article_id in
+        <foreach collection="articleIds" index="index" item="item"  separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        and author_id != #{authorId}
+        group by author_id
+        order by num desc
+        limit 1;
+    </select>
+
+
+    <resultMap id="Article" type="nju.oasis.serv.domain.Article">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="abstract" property="abstractContent"></result>
+        <result column="reference_count" property="referenceCount"></result>
+        <result column="citation_count" property="citationCount"></result>
+        <result column="publication" property="publication"></result>
+        <result column="publisher" property="publisher"></result>
+        <result column="date" property="date"></result>
+        <result column="pdf_link" property="pdfLink"></result>
+        <result column="total_usage" property="totalUsage"></result>
+    </resultMap>
+
+    <resultMap id="CoAuthor" type="nju.oasis.serv.domain.CoAuthor">
+        <result column="author_id" property="authorId"></result>
+        <result column="num" property="cooperationTimes"></result>
+    </resultMap>
+</mapper>

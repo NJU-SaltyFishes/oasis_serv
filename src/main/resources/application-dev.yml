@@ -8,13 +8,13 @@ spring:
   application:
     name: oasis-serv
   datasource:
-    url: jdbc:mysql://cdb-nb7925gu.cd.tencentcdb.com:10072/testJson?useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://cdb-nb7925gu.cd.tencentcdb.com:10072/acmieee?useSSL=true&serverTimezone=UTC
     username: root
-    password: 123qwe!@#
+    password: 123456qwerty!@#$%^
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: 39.106.227.22
     port: 6379
 
-#mybatis-plus:
-#  mapper-locations: classpath:dataImpl/*/*Mapper.xml
+mybatis:
+  mapper-locations: classpath:daoImpl/*DAO.xml
