@@ -13,7 +13,7 @@ spring:
   application:
     name: oasis-serv
   datasource:
-    url: jdbc:mysql://cdb-nb7925gu.cd.tencentcdb.com:10072/testJson?useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://cdb-nb7925gu.cd.tencentcdb.com:10072/acmieee?useSSL=true&serverTimezone=UTC
     username: root
     password: 123456qwerty!@#$%^
     driver-class-name: com.mysql.cj.jdbc.Driver
