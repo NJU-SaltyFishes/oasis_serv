@@ -10,6 +10,7 @@ import nju.oasis.serv.service.AuthorService;
 import nju.oasis.serv.vo.AuthorRequestForm;
 import nju.oasis.serv.vo.ResponseVO;
 import nju.oasis.serv.vo.ResultCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,6 +21,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @Slf4j
 public class AuthorServiceImpl implements AuthorService {
+
+    @Autowired
+    Pipeline pipeline;
+
+    @Autowired
+    CoAuthorProvider coAuthorProvider;
+
+    @Autowired
+    MostCitedArticleProvider mostCitedArticleProvider;
 
     @Override
     public ResponseVO findById(AuthorRequestForm authorRequestForm){
@@ -37,28 +47,22 @@ public class AuthorServiceImpl implements AuthorService {
         }
         Map<String, Object> result = new HashMap<>();
         //新建pipeline，并发跑查找引用最多论文和查找合作最多作者任务
-        Pipeline pipeline = new Pipeline();
         pipeline.setParamToContextData("authorId",authorRequestForm.getAuthorId());
         pipeline.setParamToContextData("articleIds",authorRequestForm.getArticleIds());
-        pipeline.addProviderAsGroup(new MostCitedArticleProvider(),new CoAuthorProvider());
+        pipeline.addProviderAsGroup(mostCitedArticleProvider,coAuthorProvider);
         pipeline.doPipeline();
         ConcurrentHashMap<String, Object> concurrentHashMap = pipeline.getContextData();
-
-        for (String key:concurrentHashMap.keySet()){
-            System.out.println(key +": " + concurrentHashMap.get(key));
-        }
-
-        if(!concurrentHashMap.contains("mostCitedArticle")){
+        if(!concurrentHashMap.containsKey("mostCitedArticle")){
             log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have articles!");
         }
         else{
-            result.put("mostCitedArticle",result.get("mostCitedArticle"));
+            result.put("mostCitedArticle",concurrentHashMap.get("mostCitedArticle"));
         }
-        if(!concurrentHashMap.contains("coAuthor")){
+        if(!concurrentHashMap.containsKey("coAuthor")){
             log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have coAuthor!");
         }
         else {
-            result.put("coAuthor",result.get("coAuthor"));
+            result.put("coAuthor",concurrentHashMap.get("coAuthor"));
         }
         return ResponseVO.output(ResultCode.SUCCESS,result);
     }
