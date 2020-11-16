@@ -35,20 +35,17 @@ public class MostCitedArticleProvider extends Provider {
             }
             contextDataMap.put("mostCitedArticle", article);
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            log.warn("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
-        try{
-            if(articleIds==null){
-                return false;
-            }
-        }catch (Exception ex){
-            log.warn("[MostCitedArticleProvider] error: " + ex.getMessage());
+        if(articleIds==null){
+            log.warn("[MostCitedArticleProvider]:articleIds is null!");
             return false;
         }
         return true;
