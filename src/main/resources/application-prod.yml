@@ -21,5 +21,5 @@ spring:
     host: 39.106.227.22
     port: 6379
 
-#mybatis-plus:
-#  mapper-locations: classpath:dataImpl/*/*Mapper.xml
+mybatis:
+  mapper-locations: classpath:daoImpl/*DAO.xml
