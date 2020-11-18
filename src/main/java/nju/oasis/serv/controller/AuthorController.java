@@ -22,7 +22,7 @@ public class AuthorController {
      * @param authorRequestForm
      * @return
      */
-    @RequestMapping(value = "/articles",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/articles",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
     public ResponseVO findById(@RequestBody AuthorRequestForm authorRequestForm){
         return authorService.findById(authorRequestForm);
     }

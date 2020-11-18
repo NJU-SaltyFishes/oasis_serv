@@ -57,13 +57,17 @@ public class AuthorServiceImpl implements AuthorService {
             log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have articles!");
         }
         else{
-            result.put("mostCitedArticle",concurrentHashMap.get("mostCitedArticle"));
+            Article article = (Article) concurrentHashMap.get("mostCitedArticle");
+            result.put("articleId",article.getId());
+            result.put("articleName",article.getTitle());
         }
         if(!concurrentHashMap.containsKey("coAuthor")){
             log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have coAuthor!");
         }
         else {
-            result.put("coAuthor",concurrentHashMap.get("coAuthor"));
+            CoAuthor coAuthor = (CoAuthor) concurrentHashMap.get("coAuthor");
+            result.put("coAuthorId",coAuthor.getAuthorId());
+            result.put("coAuthorCooperationTimes",coAuthor.getCooperationTimes());
         }
         return ResponseVO.output(ResultCode.SUCCESS,result);
     }
