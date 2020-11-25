@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
+// file deepcode ignore LogLevelCheck~debug: already checked the log level
 @Slf4j
 @NoArgsConstructor
 public class MostCitedArticleProvider extends Provider {
