@@ -6,7 +6,7 @@ import nju.oasis.serv.dao.AffiliationDAO;
 import nju.oasis.serv.domain.AffiliationInfo;
 
 import java.util.concurrent.ConcurrentHashMap;
-// file deepcode ignore LogLevelCheck: It has little effect on performance
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class AffiliationDatabaseProvider extends Provider {

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-// file deepcode ignore LogLevelCheck: It has little effect on performance
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Service
 @Slf4j
 public class AuthorServiceImpl implements AuthorService {

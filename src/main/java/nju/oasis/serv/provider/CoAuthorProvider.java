@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 // file deepcode ignore LogLevelCheck~debug: already checked the log level
-// file deepcode ignore LogLevelCheck: It has little effect on performance
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class CoAuthorProvider extends Provider{

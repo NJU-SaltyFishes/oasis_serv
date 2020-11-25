@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import nju.oasis.serv.config.Model.*;
 import org.springframework.data.redis.core.ValueOperations;
 // file deepcode ignore LogLevelCheck~debug: already checked the log level
-// file deepcode ignore LogLevelCheck: It has little effect on performance
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class AffiliationRedisProvider extends Provider {
