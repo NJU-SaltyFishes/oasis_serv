@@ -1,15 +1,22 @@
 package nju.oasis.serv.provider;
 
+import com.alibaba.fastjson.JSON;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.config.Model;
+import nju.oasis.serv.domain.AffiliationPublication;
+import nju.oasis.serv.domain.CollaborationPublication;
+import nju.oasis.serv.domain.Keyword;
+import nju.oasis.serv.domain.MostCitedAuthor;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import nju.oasis.serv.config.Model.*;
+import org.springframework.data.redis.core.ValueOperations;
 
 @Slf4j
 @NoArgsConstructor
@@ -27,17 +34,6 @@ public class AffiliationRedisProvider extends Provider {
     @Override
     public boolean provide(ConcurrentHashMap<String, Object> contextDataMap) {
         try{
-            //机构发表最新文章ID
-            long newestArticleId = -1;
-            //机构关键字
-            Map<String,Object>keywords;
-            //机构被引用最多作者
-            List<Object>mostCitedAuthors;
-            //机构的合作机构
-            List<Map<String,Integer>>collaborationPublication;
-            //机构每年发表的文章
-            Map<Integer,Integer>affiliationYear;
-
             String newestArticleIdKey =
                     Model.AFFILIATION_RELATED_NEW_ARTICLE_ID_KEY_TEMPLATE+affiliationId;
             String keywordsKey = Model.AFFILIATION_RELATED_KEYWORD_KEY_TEMPLATE+affiliationId;
@@ -46,51 +42,64 @@ public class AffiliationRedisProvider extends Provider {
             String collaborationPublicationKey =
                     Model.AFFILIATION_COLLABORATION_PUBLICATION_COUNT+affiliationId;
             String affiliationYearKey = Model.AFFILIATION_YEAR_COUNT+affiliationId;
-            Set<String> keys = redisTemplate.keys("*");
+            ValueOperations<String,String>valueOperations = redisTemplate.opsForValue();
+            long newestArticleId = -1;
+            List<Keyword>keywords = new ArrayList<>();
+            MostCitedAuthor mostCitedAuthor;
+            List<CollaborationPublication> collaborationPublications = new ArrayList<>();
+            AffiliationPublication affiliationPublication;
+            //获取机构发表最新文章
             if(redisTemplate.hasKey(newestArticleIdKey)){
-                newestArticleId = (long)redisTemplate.opsForValue().get(newestArticleIdKey);
-                contextDataMap.put("newestArticleId",newestArticleId);
+                newestArticleId =
+                        Long.parseLong(valueOperations.get(newestArticleIdKey));
             }
             else{
                 log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have newestArticleId!");
             }
+            contextDataMap.put("newestArticleId",newestArticleId);
 
+            //获取机构关键字
             if(redisTemplate.hasKey(keywordsKey)){
-                keywords = redisTemplate.opsForHash().entries(keywordsKey);
-                contextDataMap.put("keywords",keywords);
+                keywords = JSON.parseArray(valueOperations.get(keywordsKey),Keyword.class);
             }
             else{
                 log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have keywords!");
             }
+            contextDataMap.put("keywords",keywords);
 
+            //获取机构引用最多作者
             if(redisTemplate.hasKey(mostCitedAuthorsKey)){
-                mostCitedAuthors = redisTemplate.opsForList().range(mostCitedAuthorsKey,0,-1);
-                contextDataMap.put("mostCitedAuthors",mostCitedAuthors);
+                mostCitedAuthor = JSON.parseObject(valueOperations.get(mostCitedAuthorsKey),MostCitedAuthor.class);
+                contextDataMap.put("mostCitedAuthors",mostCitedAuthor);
             }
             else{
                 log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have mostCitedAuthors!");
+                contextDataMap.put("mostCitedAuthors",null);
             }
 
+            //获取机构的合作机构
             if(redisTemplate.hasKey(collaborationPublicationKey)){
-                collaborationPublication = redisTemplate.opsForList().
-                        range(collaborationPublicationKey,0,-1);
-                contextDataMap.put("collaborationPublication",collaborationPublication);
+                collaborationPublications =
+                        JSON.parseArray(valueOperations.get(collaborationPublicationKey),CollaborationPublication.class);
             }
             else{
                 log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have collaborationPublication!");
             }
+            contextDataMap.put("collaborationPublication",collaborationPublications);
 
             if(redisTemplate.hasKey(affiliationYearKey)){
-                affiliationYear = redisTemplate.opsForHash().entries(affiliationYearKey);
-                contextDataMap.put("affiliationYear",affiliationYear);
+                affiliationPublication =
+                        JSON.parseObject(valueOperations.get(affiliationYearKey),AffiliationPublication.class);
+                contextDataMap.put("affiliationYear",affiliationPublication);
             }
             else{
                 log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have affiliationYearKey!");
+                contextDataMap.put("affiliationYear",new AffiliationPublication());
             }
             return true;
         }catch (Exception ex){
             ex.printStackTrace();
-            log.warn("[affiliationDatabaseProvider] error: " + ex.getMessage());
+            log.error("[affiliationRedisProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -98,7 +107,7 @@ public class AffiliationRedisProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(affiliationId<=0){
-            log.warn("[affiliationRedisProvider]: affiliationId<=0!");
+            log.debug("[affiliationRedisProvider]: affiliationId<=0!");
             return false;
         }
         return true;

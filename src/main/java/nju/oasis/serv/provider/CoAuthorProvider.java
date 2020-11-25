@@ -32,16 +32,15 @@ public class CoAuthorProvider extends Provider{
         try {
             CoAuthor coAuthor = authorDAO.findMostFrequentCoAuthor(authorId, articleIds);
             if (coAuthor == null) {
-                log.warn("[CoAuthorProvider]: authorId:" + authorId + "may not have coAuthor");
+                log.debug("[CoAuthorProvider]: authorId:" + authorId + "may not have coAuthor");
                 articleIds.forEach(item -> log.warn("[CoAuthorProvider]: articleIds" + articleIds.toString() +
                         "may contain invalid id: " + item));
-                return false;
             }
             contextDataMap.put("coAuthor", coAuthor);
             return true;
         }catch (Exception ex){
             ex.printStackTrace();
-            log.warn("[CoAuthorProvider] error: " + ex.getMessage());
+            log.error("[CoAuthorProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -50,7 +49,7 @@ public class CoAuthorProvider extends Provider{
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
 
         if(articleIds==null||authorId<=0){
-            log.warn("[CoAuthorProvider]:articleIds is null or authorId<0!");
+            log.debug("[CoAuthorProvider]:articleIds is null or authorId<0!");
             return false;
         }
         return true;
