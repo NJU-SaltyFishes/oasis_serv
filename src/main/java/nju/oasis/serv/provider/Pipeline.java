@@ -44,14 +44,14 @@ public class Pipeline {
             ExecutorService threadPool = Executors.newCachedThreadPool();
             for (Provider provider: providerGroup){
                 if (!provider.parseParams(contextDataMap)){
-                    log.warn(provider.toString() + " invalid params");
+                    if(log.isWarnEnabled())log.warn(provider.toString() + " invalid params");
                     continue;
                 }
                 Runnable r = () -> {
                     if (provider.provide(contextDataMap)){
-                        log.info(provider.toString() + " finished");
+                        if(log.isInfoEnabled())log.info(provider.toString() + " finished");
                     }else {
-                        log.error(provider.toString() + " failed");
+                        if(log.isErrorEnabled())log.error(provider.toString() + " failed");
                     }
                 };
                 threadPool.submit(r);

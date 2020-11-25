@@ -25,14 +25,14 @@ public class AffiliationDatabaseProvider extends Provider {
         try{
             AffiliationInfo affiliationInfo = affiliationDAO.findAffiliationInfoById(affiliationId);
             if(affiliationInfo==null){
-                log.warn("[affiliationDatabaseProvider]: affiliationId:"+affiliationId+" doesn't have " +
-                        "affiliation information!" );
+                if(log.isWarnEnabled()) log.warn("[affiliationDatabaseProvider]: affiliationId:" + affiliationId + " doesn't have " +
+                            "affiliation information!");
                 return false;
             }
             contextDataMap.put("affiliationInfo",affiliationInfo);
             return true;
         }catch (Exception ex){
-            log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
+            if(log.isErrorEnabled()) log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -40,7 +40,7 @@ public class AffiliationDatabaseProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(affiliationId<=0){
-            log.debug("[affiliationDatabaseProvider]: affiliationId<=0!");
+            if(log.isWarnEnabled())log.warn("[affiliationDatabaseProvider]: affiliationId<=0!");
             return false;
         }
         return true;

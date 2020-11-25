@@ -54,7 +54,7 @@ public class AffiliationRedisProvider extends Provider {
                         Long.parseLong(valueOperations.get(newestArticleIdKey));
             }
             else{
-                log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have newestArticleId!");
+                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have newestArticleId!");
             }
             contextDataMap.put("newestArticleId",newestArticleId);
 
@@ -63,7 +63,7 @@ public class AffiliationRedisProvider extends Provider {
                 keywords = JSON.parseArray(valueOperations.get(keywordsKey),Keyword.class);
             }
             else{
-                log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have keywords!");
+                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have keywords!");
             }
             contextDataMap.put("keywords",keywords);
 
@@ -73,7 +73,7 @@ public class AffiliationRedisProvider extends Provider {
                 contextDataMap.put("mostCitedAuthors",mostCitedAuthor);
             }
             else{
-                log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have mostCitedAuthors!");
+                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have mostCitedAuthors!");
                 contextDataMap.put("mostCitedAuthors",null);
             }
 
@@ -83,7 +83,7 @@ public class AffiliationRedisProvider extends Provider {
                         JSON.parseArray(valueOperations.get(collaborationPublicationKey),CollaborationPublication.class);
             }
             else{
-                log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have collaborationPublication!");
+                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have collaborationPublication!");
             }
             contextDataMap.put("collaborationPublication",collaborationPublications);
 
@@ -93,12 +93,12 @@ public class AffiliationRedisProvider extends Provider {
                 contextDataMap.put("affiliationYear",affiliationPublication);
             }
             else{
-                log.warn("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have affiliationYearKey!");
+                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have affiliationYearKey!");
                 contextDataMap.put("affiliationYear",new AffiliationPublication());
             }
             return true;
         }catch (Exception ex){
-            log.error("[affiliationRedisProvider] error: " + ex.getMessage());
+            if(log.isErrorEnabled())log.error("[affiliationRedisProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -106,7 +106,7 @@ public class AffiliationRedisProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(affiliationId<=0){
-            log.debug("[affiliationRedisProvider]: affiliationId<=0!");
+            if(log.isWarnEnabled())log.warn("[affiliationRedisProvider]: affiliationId<=0!");
             return false;
         }
         return true;

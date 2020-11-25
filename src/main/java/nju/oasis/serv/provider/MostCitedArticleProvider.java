@@ -28,13 +28,13 @@ public class MostCitedArticleProvider extends Provider {
         try {
             Article article = authorDAO.findMaxCitationByIds(articleIds);
             if (article == null) {
-                articleIds.forEach(item -> log.warn("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
+                if(log.isDebugEnabled())articleIds.forEach(item -> log.debug("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
                         " contain invalid id: " + item));
             }
             contextDataMap.put("mostCitedArticle", article);
             return true;
         }catch (Exception ex){
-            log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
+            if(log.isErrorEnabled())log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -42,7 +42,7 @@ public class MostCitedArticleProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(articleIds==null){
-            log.debug("[MostCitedArticleProvider]:articleIds is null!");
+            if(log.isWarnEnabled())log.warn("[MostCitedArticleProvider]:articleIds is null!");
             return false;
         }
         return true;

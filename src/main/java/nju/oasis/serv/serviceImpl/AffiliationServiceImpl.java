@@ -35,7 +35,7 @@ public class AffiliationServiceImpl implements AffiliationService {
 
         //新建pipeline，并发跑查找引用最多论文和查找合作最多作者任务
         if(id<=0){
-            log.debug("[findAffiliationInfoById]: affiliationId<=0!");
+            if(log.isWarnEnabled())log.warn("[findAffiliationInfoById]: affiliationId<=0!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
         Map<String, Object> result = new HashMap<>();

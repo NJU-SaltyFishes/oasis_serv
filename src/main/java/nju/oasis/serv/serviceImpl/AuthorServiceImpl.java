@@ -30,15 +30,15 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public ResponseVO findById(AuthorRequestForm authorRequestForm){
         if(authorRequestForm==null){
-            log.warn("[findById] authorRequestForm must exist but was null!");
+            if(log.isWarnEnabled())log.warn("[findById] authorRequestForm must exist but was null!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
         else if(authorRequestForm.getArticleIds()==null||authorRequestForm.getArticleIds().size()==0){
-            log.warn("[findById] articles'size must >0 but articles  were null or articles'size=0");
+            if(log.isWarnEnabled())log.warn("[findById] articles'size must >0 but articles  were null or articles'size=0");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
         else if(authorRequestForm.getAuthorId()==null){
-            log.warn("[findById] authorId must exist but was null!");
+            if(log.isWarnEnabled())log.warn("[findById] authorId must exist but was null!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
         Map<String, Object> result = new HashMap<>();
@@ -54,7 +54,7 @@ public class AuthorServiceImpl implements AuthorService {
         pipeline.doPipeline();
         ConcurrentHashMap<String, Object> concurrentHashMap = pipeline.getContextData();
         if(!concurrentHashMap.containsKey("mostCitedArticle")){
-            log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have articles!");
+            if(log.isWarnEnabled())log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have articles!");
         }
         else{
             Article article = (Article) concurrentHashMap.get("mostCitedArticle");
@@ -62,7 +62,7 @@ public class AuthorServiceImpl implements AuthorService {
             result.put("articleName",article.getTitle());
         }
         if(!concurrentHashMap.containsKey("coAuthor")){
-            log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have coAuthor!");
+            if(log.isWarnEnabled())log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have coAuthor!");
         }
         else {
             CoAuthor coAuthor = (CoAuthor) concurrentHashMap.get("coAuthor");
