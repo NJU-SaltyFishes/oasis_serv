@@ -34,7 +34,6 @@ public class MostCitedArticleProvider extends Provider {
             contextDataMap.put("mostCitedArticle", article);
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
             log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;
         }

@@ -32,7 +32,6 @@ public class AffiliationDatabaseProvider extends Provider {
             contextDataMap.put("affiliationInfo",affiliationInfo);
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
             log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
             return false;
         }

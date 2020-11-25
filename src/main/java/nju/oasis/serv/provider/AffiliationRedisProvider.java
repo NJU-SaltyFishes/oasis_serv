@@ -98,7 +98,6 @@ public class AffiliationRedisProvider extends Provider {
             }
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
             log.error("[affiliationRedisProvider] error: " + ex.getMessage());
             return false;
         }

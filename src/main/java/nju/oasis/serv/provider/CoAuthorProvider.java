@@ -39,7 +39,6 @@ public class CoAuthorProvider extends Provider{
             contextDataMap.put("coAuthor", coAuthor);
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
             log.error("[CoAuthorProvider] error: " + ex.getMessage());
             return false;
         }

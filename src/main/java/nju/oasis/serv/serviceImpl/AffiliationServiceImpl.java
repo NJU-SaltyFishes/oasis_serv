@@ -49,12 +49,12 @@ public class AffiliationServiceImpl implements AffiliationService {
         ConcurrentHashMap<String, Object> concurrentHashMap = pipeline.getContextData();
         concurrentHashMap.forEach((key,value)->{
             result.put(key,value);
-            if(key=="keywords"){
+            if(key.equals("keywords")){
                 List<Keyword>keywords = (List<Keyword>)value;
                 //第一关键字
                 if(keywords.size()>0)result.put("topKeyword",keywords.get(0));
             }
-            else if(key=="collaborationPublication"){
+            else if(key.equals("collaborationPublication")){
                 List<CollaborationPublication> collaborationPublications =
                         (List<CollaborationPublication>)value;
                 //合作最多的机构
