@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import nju.oasis.serv.config.Model.*;
 import org.springframework.data.redis.core.ValueOperations;
 // file deepcode ignore LogLevelCheck~debug: already checked the log level
+// file deepcode ignore LogLevelCheck: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class AffiliationRedisProvider extends Provider {
@@ -54,7 +55,7 @@ public class AffiliationRedisProvider extends Provider {
                         Long.parseLong(valueOperations.get(newestArticleIdKey));
             }
             else{
-                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have newestArticleId!");
+                log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have newestArticleId!");
             }
             contextDataMap.put("newestArticleId",newestArticleId);
 
@@ -63,7 +64,7 @@ public class AffiliationRedisProvider extends Provider {
                 keywords = JSON.parseArray(valueOperations.get(keywordsKey),Keyword.class);
             }
             else{
-                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have keywords!");
+                log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have keywords!");
             }
             contextDataMap.put("keywords",keywords);
 
@@ -73,7 +74,7 @@ public class AffiliationRedisProvider extends Provider {
                 contextDataMap.put("mostCitedAuthors",mostCitedAuthor);
             }
             else{
-                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have mostCitedAuthors!");
+                log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have mostCitedAuthors!");
                 contextDataMap.put("mostCitedAuthors",null);
             }
 
@@ -83,7 +84,7 @@ public class AffiliationRedisProvider extends Provider {
                         JSON.parseArray(valueOperations.get(collaborationPublicationKey),CollaborationPublication.class);
             }
             else{
-                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have collaborationPublication!");
+                log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have collaborationPublication!");
             }
             contextDataMap.put("collaborationPublication",collaborationPublications);
 
@@ -93,12 +94,12 @@ public class AffiliationRedisProvider extends Provider {
                 contextDataMap.put("affiliationYear",affiliationPublication);
             }
             else{
-                if(log.isDebugEnabled())log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have affiliationYearKey!");
+                log.debug("[affiliationRedisProvider]: affiliationId:"+affiliationId+" doesn't have affiliationYearKey!");
                 contextDataMap.put("affiliationYear",new AffiliationPublication());
             }
             return true;
         }catch (Exception ex){
-            if(log.isErrorEnabled())log.error("[affiliationRedisProvider] error: " + ex.getMessage());
+            log.error("[affiliationRedisProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -106,7 +107,7 @@ public class AffiliationRedisProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(affiliationId<=0){
-            if(log.isWarnEnabled())log.warn("[affiliationRedisProvider]: affiliationId<=0!");
+            log.warn("[affiliationRedisProvider]: affiliationId<=0!");
             return false;
         }
         return true;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.concurrent.*;
-
+// file deepcode ignore LogLevelCheck: It has little effect on performance
 @Slf4j
 public class Pipeline {
     private ConcurrentLinkedQueue<ConcurrentLinkedQueue<Provider>> providerGroupList;
@@ -44,14 +44,14 @@ public class Pipeline {
             ExecutorService threadPool = Executors.newCachedThreadPool();
             for (Provider provider: providerGroup){
                 if (!provider.parseParams(contextDataMap)){
-                    if(log.isWarnEnabled())log.warn(provider.toString() + " invalid params");
+                    log.warn(provider.toString() + " invalid params");
                     continue;
                 }
                 Runnable r = () -> {
                     if (provider.provide(contextDataMap)){
-                        if(log.isInfoEnabled())log.info(provider.toString() + " finished");
+                        log.info(provider.toString() + " finished");
                     }else {
-                        if(log.isErrorEnabled())log.error(provider.toString() + " failed");
+                        log.error(provider.toString() + " failed");
                     }
                 };
                 threadPool.submit(r);

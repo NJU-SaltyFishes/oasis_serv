@@ -16,5 +16,5 @@ public class CollaborationPublication {
 
 
     @JSONField(name = "collaboration_count",ordinal = 2)
-    private int collaboration_count;
+    private int collaborationCount;
 }

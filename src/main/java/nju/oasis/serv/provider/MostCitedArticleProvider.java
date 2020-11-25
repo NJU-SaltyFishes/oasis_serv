@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+// file deepcode ignore LogLevelCheck: It has little effect on performance
 // file deepcode ignore LogLevelCheck~debug: already checked the log level
 @Slf4j
 @NoArgsConstructor
@@ -28,13 +29,13 @@ public class MostCitedArticleProvider extends Provider {
         try {
             Article article = authorDAO.findMaxCitationByIds(articleIds);
             if (article == null) {
-                if(log.isDebugEnabled())articleIds.forEach(item -> log.debug("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
+                articleIds.forEach(item -> log.debug("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
                         " contain invalid id: " + item));
             }
             contextDataMap.put("mostCitedArticle", article);
             return true;
         }catch (Exception ex){
-            if(log.isErrorEnabled())log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
+            log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -42,7 +43,7 @@ public class MostCitedArticleProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(articleIds==null){
-            if(log.isWarnEnabled())log.warn("[MostCitedArticleProvider]:articleIds is null!");
+            log.warn("[MostCitedArticleProvider]:articleIds is null!");
             return false;
         }
         return true;

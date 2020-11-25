@@ -6,7 +6,7 @@ import nju.oasis.serv.dao.AffiliationDAO;
 import nju.oasis.serv.domain.AffiliationInfo;
 
 import java.util.concurrent.ConcurrentHashMap;
-
+// file deepcode ignore LogLevelCheck: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class AffiliationDatabaseProvider extends Provider {
@@ -25,14 +25,14 @@ public class AffiliationDatabaseProvider extends Provider {
         try{
             AffiliationInfo affiliationInfo = affiliationDAO.findAffiliationInfoById(affiliationId);
             if(affiliationInfo==null){
-                if(log.isWarnEnabled()) log.warn("[affiliationDatabaseProvider]: affiliationId:" + affiliationId + " doesn't have " +
+                log.warn("[affiliationDatabaseProvider]: affiliationId:" + affiliationId + " doesn't have " +
                             "affiliation information!");
                 return false;
             }
             contextDataMap.put("affiliationInfo",affiliationInfo);
             return true;
         }catch (Exception ex){
-            if(log.isErrorEnabled()) log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
+            log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
             return false;
         }
     }
@@ -40,7 +40,7 @@ public class AffiliationDatabaseProvider extends Provider {
     @Override
     public boolean parseParams(ConcurrentHashMap<String, Object> contextDataMap) {
         if(affiliationId<=0){
-            if(log.isWarnEnabled())log.warn("[affiliationDatabaseProvider]: affiliationId<=0!");
+            log.warn("[affiliationDatabaseProvider]: affiliationId<=0!");
             return false;
         }
         return true;
