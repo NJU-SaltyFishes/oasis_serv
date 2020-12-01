@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.concurrent.*;
-
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 public class Pipeline {
     private ConcurrentLinkedQueue<ConcurrentLinkedQueue<Provider>> providerGroupList;

@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.domain.Article;
 import nju.oasis.serv.domain.CoAuthor;
+import nju.oasis.serv.domain.YDirection;
 import nju.oasis.serv.provider.CoAuthorProvider;
+import nju.oasis.serv.provider.DirectionYearProvider;
 import nju.oasis.serv.provider.MostCitedArticleProvider;
 import nju.oasis.serv.provider.Pipeline;
 import nju.oasis.serv.service.AuthorService;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Service
 @Slf4j
 public class AuthorServiceImpl implements AuthorService {
@@ -49,8 +51,10 @@ public class AuthorServiceImpl implements AuthorService {
                 MostCitedArticleProvider(authorDAO,authorRequestForm.getArticleIds());
         CoAuthorProvider coAuthorProvider = new CoAuthorProvider(authorDAO,
                 authorRequestForm.getAuthorId(),authorRequestForm.getArticleIds());
-
-        pipeline.addProviderAsGroup(mostCitedArticleProvider,coAuthorProvider);
+        DirectionYearProvider directionYearProvider = new DirectionYearProvider(
+                authorDAO,authorRequestForm.getAuthorId()
+        );
+        pipeline.addProviderAsGroup(mostCitedArticleProvider,coAuthorProvider,directionYearProvider);
         pipeline.doPipeline();
         ConcurrentHashMap<String, Object> concurrentHashMap = pipeline.getContextData();
         if(!concurrentHashMap.containsKey("mostCitedArticle")){
@@ -68,6 +72,13 @@ public class AuthorServiceImpl implements AuthorService {
             CoAuthor coAuthor = (CoAuthor) concurrentHashMap.get("coAuthor");
             result.put("coAuthorId",coAuthor.getAuthorId());
             result.put("coAuthorCooperationTimes",coAuthor.getCooperationTimes());
+        }
+        if(!concurrentHashMap.containsKey("directions")){
+            log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have directions!");
+        }
+        else{
+            List<YDirection>yDirections = (List)concurrentHashMap.get("directions");
+            result.put("directionYear",yDirections);
         }
         return ResponseVO.output(ResultCode.SUCCESS,result);
     }

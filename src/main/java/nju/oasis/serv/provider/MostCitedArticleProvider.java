@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
+// file deepcode ignore LogLevelCheck: It has little effect on performance
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class MostCitedArticleProvider extends Provider {
@@ -28,16 +29,13 @@ public class MostCitedArticleProvider extends Provider {
         try {
             Article article = authorDAO.findMaxCitationByIds(articleIds);
             if (article == null) {
-                articleIds.forEach(item -> log.warn("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
+                articleIds.forEach(item -> log.debug("[MostCitedArticleProvider]: articleIds" + articleIds.toString() +
                         " contain invalid id: " + item));
-                return false;
-
             }
             contextDataMap.put("mostCitedArticle", article);
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
-            log.warn("[MostCitedArticleProvider] error: " + ex.getMessage());
+            log.error("[MostCitedArticleProvider] error: " + ex.getMessage());
             return false;
         }
     }

@@ -3,6 +3,7 @@ package nju.oasis.serv.dao;
 import nju.oasis.serv.OasisServApplicationTests;
 import nju.oasis.serv.domain.Article;
 import nju.oasis.serv.domain.CoAuthor;
+import nju.oasis.serv.domain.YDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,5 +42,32 @@ class AuthorDAOTest extends OasisServApplicationTests {
         CoAuthor coAuthor = authorDAO.findMostFrequentCoAuthor(authorId,articleIds);
         assertEquals(Long.valueOf("66489"),coAuthor.getAuthorId());
         assertEquals(3,coAuthor.getCooperationTimes());
+    }
+
+    @Test
+    void findDirectionYear(){
+        long authorId = 1;
+        List<YDirection>yDirections = authorDAO.findDirectionYear(authorId);
+        assertEquals(1,yDirections.size());
+        assertEquals(2013,yDirections.get(0).getYear());
+        assertEquals("1000000000:computing methodologies,1000000001:artificial intelligence," +
+                "1000000103:natural language processing,1000000222:speech recognition",
+                yDirections.get(0).getDirections());
+    }
+
+    @Test
+    void findDirectionYear1(){
+        long authorId = 2;
+        List<YDirection>yDirections = authorDAO.findDirectionYear(authorId);
+        assertEquals(2,yDirections.size());
+        assertEquals(2012,yDirections.get(0).getYear());
+        assertEquals(2016,yDirections.get(1).getYear());
+    }
+
+    @Test
+    void  findDirectionYear2(){
+        long authorId = 1000000000;
+        List<YDirection>yDirections = authorDAO.findDirectionYear(authorId);
+        assertEquals(0,yDirections.size());
     }
 }

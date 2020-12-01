@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
+// file deepcode ignore LogLevelCheck~debug: already checked the log level
+// file deepcode ignore GuardLogStatement: It has little effect on performance
 @Slf4j
 @NoArgsConstructor
 public class CoAuthorProvider extends Provider{
@@ -32,16 +33,14 @@ public class CoAuthorProvider extends Provider{
         try {
             CoAuthor coAuthor = authorDAO.findMostFrequentCoAuthor(authorId, articleIds);
             if (coAuthor == null) {
-                log.warn("[CoAuthorProvider]: authorId:" + authorId + "may not have coAuthor");
-                articleIds.forEach(item -> log.warn("[CoAuthorProvider]: articleIds" + articleIds.toString() +
+                log.debug("[CoAuthorProvider]: authorId:" + authorId + "may not have coAuthor");
+                articleIds.forEach(item -> log.debug("[CoAuthorProvider]: articleIds" + articleIds.toString() +
                         "may contain invalid id: " + item));
-                return false;
             }
             contextDataMap.put("coAuthor", coAuthor);
             return true;
         }catch (Exception ex){
-            ex.printStackTrace();
-            log.warn("[CoAuthorProvider] error: " + ex.getMessage());
+            log.error("[CoAuthorProvider] error: " + ex.getMessage());
             return false;
         }
     }
