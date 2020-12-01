@@ -23,6 +23,20 @@
         limit 1;
     </select>
 
+    <select id="findDirectionYear" resultMap="YDirection">
+        SELECT year(art.date) as year,
+        substring_index(group_concat(distinct concat(kwar.keyword_id,":",kwar.keyword_desc) order by kwar.keyword_id separator ","),',',10) as directions
+        FROM author_article auar
+        left join article art on auar.article_id = art.id
+        left join keyword_article kwar on art.id = kwar.article_id
+        where author_id = #{authorId} group by year
+        order by year
+    </select>
+
+    <resultMap id="YDirection" type="nju.oasis.serv.domain.YDirection">
+        <result column="year" property="year"></result>
+        <result column="directions" property="directions"></result>
+    </resultMap>
 
     <resultMap id="Article" type="nju.oasis.serv.domain.Article">
         <result column="id" property="id"></result>
