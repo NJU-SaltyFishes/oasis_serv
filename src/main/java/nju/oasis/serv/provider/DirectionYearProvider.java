@@ -34,7 +34,7 @@ public class DirectionYearProvider extends Provider{
             yDirections.forEach(yDirection->{
                 String directions = yDirection.getDirections();
                 List<Keyword>formatDirections = new ArrayList<>();
-                List<String>directionList = Arrays.asList(directions.split(","));
+                List<String>directionList = Arrays.asList(directions.split("\t"));
                 directionList.forEach(direction->{
                     String[]directionIdAndName = direction.split(":");
                     Keyword keyword = new Keyword();
