@@ -50,9 +50,6 @@ class AuthorDAOTest extends OasisServApplicationTests {
         List<YDirection>yDirections = authorDAO.findDirectionYear(authorId);
         assertEquals(1,yDirections.size());
         assertEquals(2013,yDirections.get(0).getYear());
-        assertEquals("1000000000:computing methodologies,1000000001:artificial intelligence," +
-                "1000000103:natural language processing,1000000222:speech recognition",
-                yDirections.get(0).getDirections());
     }
 
     @Test

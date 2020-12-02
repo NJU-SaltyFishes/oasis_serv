@@ -25,7 +25,7 @@
 
     <select id="findDirectionYear" resultMap="YDirection">
         SELECT year(art.date) as year,
-        substring_index(group_concat(distinct concat(kwar.keyword_id,":",kwar.keyword_desc) order by kwar.keyword_id separator ","),',',10) as directions
+        substring_index(group_concat(distinct concat(kwar.keyword_id,":",kwar.keyword_desc) order by kwar.keyword_id separator "\t"),',',10) as directions
         FROM author_article auar
         left join article art on auar.article_id = art.id
         left join keyword_article kwar on art.id = kwar.article_id
