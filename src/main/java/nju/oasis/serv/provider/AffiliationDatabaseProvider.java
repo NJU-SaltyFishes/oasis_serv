@@ -29,7 +29,15 @@ public class AffiliationDatabaseProvider extends Provider {
                             "affiliation information!");
                 return false;
             }
-            contextDataMap.put("affiliationInfo",affiliationInfo);
+            contextDataMap.put("affiliationId",affiliationInfo.getAffiliationId());
+            contextDataMap.put("name",affiliationInfo.getAffiliationName());
+            contextDataMap.put("averageCitation",affiliationInfo.getAverageCitationPerArticle());
+            contextDataMap.put("citationNum",affiliationInfo.getCitationCount());
+            contextDataMap.put("publicationNum",affiliationInfo.getPublicationCount());
+            contextDataMap.put("startYear",affiliationInfo.getStartYear());
+            contextDataMap.put("endYear",affiliationInfo.getEndYear());
+            contextDataMap.put("availableDownload",affiliationInfo.getAvailableDownload());
+            contextDataMap.put("averageDownload",affiliationInfo.getAverageDownloadPerArticle());
             return true;
         }catch (Exception ex){
             log.error("[affiliationDatabaseProvider] error: " + ex.getMessage());
