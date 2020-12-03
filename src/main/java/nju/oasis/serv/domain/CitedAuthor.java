@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MostCitedAuthor {
+public class CitedAuthor {
 
     @JSONField(name = "author_id",ordinal = 0)
     private long authorId;
 
     @JSONField(name = "author_name",ordinal = 1)
-    private String authorName;
+    private String name;
 
     @JSONField(name = "cited_num",ordinal = 2)
     private int citedNum;

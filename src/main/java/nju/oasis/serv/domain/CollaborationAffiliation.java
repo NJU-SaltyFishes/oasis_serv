@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CollaborationPublication {
+public class CollaborationAffiliation {
 
     @JSONField(name = "affiliation_id",ordinal = 0)
     private long affiliationId;
 
     @JSONField(name = "affiliation_name",ordinal = 1)
-    private String affiliationName;
+    private String name;
 
 
     @JSONField(name = "collaboration_count",ordinal = 2)
-    private int collaborationCount;
+    private int collaborationNum;
 }

@@ -1,7 +1,6 @@
 package nju.oasis.serv.domain;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -15,5 +14,5 @@ public class YDirection {
 
     private String directions;
 
-    private List<Keyword>formatDirections;
+    private List<Direction>formatDirections;
 }

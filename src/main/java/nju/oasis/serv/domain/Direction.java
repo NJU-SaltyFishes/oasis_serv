@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Keyword {
+public class Direction {
 
     @JSONField(name = "keyword_id",ordinal = 0)
-    private long keywordId;
+    private long directionId;
 
     @JSONField(name = "keyword_desc",ordinal = 1)
-    private String keywordDesc;
+    private String name;
 
     @JSONField(name = "keyword_appear_num",ordinal = 2)
-    private int keywordAppearNum;
+    private int appearNum;
 }

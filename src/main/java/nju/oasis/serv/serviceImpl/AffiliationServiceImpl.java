@@ -2,9 +2,8 @@ package nju.oasis.serv.serviceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AffiliationDAO;
-import nju.oasis.serv.domain.AffiliationInfo;
-import nju.oasis.serv.domain.CollaborationPublication;
-import nju.oasis.serv.domain.Keyword;
+import nju.oasis.serv.domain.CollaborationAffiliation;
+import nju.oasis.serv.domain.Direction;
 import nju.oasis.serv.provider.AffiliationDatabaseProvider;
 import nju.oasis.serv.provider.AffiliationRedisProvider;
 import nju.oasis.serv.provider.Pipeline;
@@ -50,16 +49,16 @@ public class AffiliationServiceImpl implements AffiliationService {
         concurrentHashMap.forEach((key,value)->{
             result.put(key,value);
             if(key.equals("keywords")){
-                List<Keyword>keywords = (List<Keyword>)value;
+                List<Direction> directions = (List<Direction>)value;
                 //第一关键字
-                if(keywords.size()>0)result.put("topKeyword",keywords.get(0));
+                if(directions.size()>0)result.put("topKeyword", directions.get(0));
             }
             else if(key.equals("collaborationPublication")){
-                List<CollaborationPublication> collaborationPublications =
-                        (List<CollaborationPublication>)value;
+                List<CollaborationAffiliation> collaborationAffiliations =
+                        (List<CollaborationAffiliation>)value;
                 //合作最多的机构
-                if(collaborationPublications.size()>0)result.put("topCollaboration",
-                        collaborationPublications.get(0));
+                if(collaborationAffiliations.size()>0)result.put("topCollaboration",
+                        collaborationAffiliations.get(0));
             }
         });
         return ResponseVO.output(ResultCode.SUCCESS,result);
