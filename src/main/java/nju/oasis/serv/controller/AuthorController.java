@@ -26,4 +26,9 @@ public class AuthorController {
     public ResponseVO findById(@RequestBody AuthorRequestForm authorRequestForm){
         return authorService.findById(authorRequestForm);
     }
+
+    @RequestMapping(value = "/relations/{id}",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    public ResponseVO findRelationsById(@PathVariable("id")long id){
+        return authorService.findRelationsById(id);
+    }
 }

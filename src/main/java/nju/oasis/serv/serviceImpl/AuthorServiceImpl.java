@@ -82,4 +82,9 @@ public class AuthorServiceImpl implements AuthorService {
         }
         return ResponseVO.output(ResultCode.SUCCESS,result);
     }
+
+    @Override
+    public ResponseVO findRelationsById(long id){
+        return null;
+    }
 }

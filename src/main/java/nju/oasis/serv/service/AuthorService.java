@@ -7,4 +7,6 @@ import nju.oasis.serv.vo.ResponseVO;
 public interface AuthorService {
 
     ResponseVO findById(AuthorRequestForm authorRequestForm);
+
+    ResponseVO findRelationsById(long id);
 }
