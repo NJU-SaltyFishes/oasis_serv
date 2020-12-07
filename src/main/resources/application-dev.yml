@@ -15,6 +15,11 @@ spring:
   redis:
     host: 39.106.227.22
     port: 6379
+  data:
+    neo4j:
+      uri: bolt://152.136.140.52:7687
+      username: neo4j
+      password: neo4j.com147258369
 
 mybatis:
   mapper-locations: classpath:daoImpl/*DAO.xml
