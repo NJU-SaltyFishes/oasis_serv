@@ -2,8 +2,10 @@ package nju.oasis.serv.serviceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 import nju.oasis.serv.dao.AuthorDAO;
+import nju.oasis.serv.dao.AuthorNeo4jDAO;
 import nju.oasis.serv.domain.Article;
 import nju.oasis.serv.domain.CoAuthor;
+import nju.oasis.serv.domain.DAuthor;
 import nju.oasis.serv.domain.YDirection;
 import nju.oasis.serv.provider.CoAuthorProvider;
 import nju.oasis.serv.provider.DirectionYearProvider;
@@ -28,6 +30,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Resource
     AuthorDAO authorDAO;
+
+    @Autowired
+    AuthorNeo4jDAO authorNeo4jDAO;
 
     @Override
     public ResponseVO findById(AuthorRequestForm authorRequestForm){
@@ -84,7 +89,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public ResponseVO findRelationsById(long id){
-        return null;
+    public ResponseVO findRelationsById(long id,int minLevel,int maxLevel,int numOfEachLayer){
+        if(id<=0){
+            log.warn("[findRelationsById] authorId must be greater than 0!");
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
+        }
+        List<DAuthor>dAuthors = authorNeo4jDAO.findByAuthorId(id,minLevel,maxLevel,numOfEachLayer);
+        if(dAuthors.size()<maxLevel){
+            log.warn("[findRelationsById] authorId:" + id + " may not have "+maxLevel+" layers!");
+            for(int i=dAuthors.size()+1;i<=maxLevel;i++){
+                dAuthors.add(new DAuthor(i));
+            }
+        }
+        return ResponseVO.output(ResultCode.SUCCESS,dAuthors);
     }
 }

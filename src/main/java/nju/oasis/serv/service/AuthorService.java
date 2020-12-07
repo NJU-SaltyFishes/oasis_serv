@@ -8,5 +8,5 @@ public interface AuthorService {
 
     ResponseVO findById(AuthorRequestForm authorRequestForm);
 
-    ResponseVO findRelationsById(long id);
+    ResponseVO findRelationsById(long id,int minLevel,int maxLevel,int numOfEachLayer);
 }
