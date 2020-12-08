@@ -94,12 +94,15 @@ public class AuthorServiceImpl implements AuthorService {
             log.warn("[findRelationsById] authorId must be greater than 0!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
-        List<DAuthor>dAuthors = authorNeo4jDAO.findByAuthorId(id,minLevel,maxLevel,numOfEachLayer);
+        List<DAuthor>dAuthors = authorNeo4jDAO.findByAuthorId(id,maxLevel,numOfEachLayer);
         if(dAuthors.size()<maxLevel){
             log.warn("[findRelationsById] authorId:" + id + " may not have "+maxLevel+" layers!");
             for(int i=dAuthors.size()+1;i<=maxLevel;i++){
                 dAuthors.add(new DAuthor(i));
             }
+        }
+        for(int i=dAuthors.size()-maxLevel+minLevel;i>1;i--){
+            dAuthors.remove(0);
         }
         return ResponseVO.output(ResultCode.SUCCESS,dAuthors);
     }
