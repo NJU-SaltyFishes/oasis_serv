@@ -9,4 +9,6 @@ public interface AuthorService {
     ResponseVO findById(AuthorRequestForm authorRequestForm);
 
     ResponseVO findRelationsById(long id,int minLevel,int maxLevel,int numOfEachLayer);
+
+    ResponseVO findPredictionsById(long id,Double minDistance,Double maxDistance,int maxNum);
 }

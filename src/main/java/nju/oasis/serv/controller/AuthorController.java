@@ -34,4 +34,13 @@ public class AuthorController {
                                         @RequestParam(value = "numOfEachLayer")Integer numOfEachLayer){
         return authorService.findRelationsById(id,minLevel,maxLevel,numOfEachLayer);
     }
+
+    @RequestMapping(value = "/predictions/{id}",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    public ResponseVO findPredictionsById(@PathVariable("id")long id,
+                                          @RequestParam(value = "minDistance")Double minDistance,
+                                          @RequestParam(value = "maxDistance")Double maxDistance,
+                                          @RequestParam(value = "maxNum")int maxNum){
+
+        return authorService.findPredictionsById(id,minDistance,maxDistance,maxNum);
+    }
 }
