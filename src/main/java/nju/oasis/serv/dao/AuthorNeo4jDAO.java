@@ -11,7 +11,7 @@ import java.util.List;
 public interface AuthorNeo4jDAO extends CrudRepository<Author,Long> {
 
     @Query("MATCH (a1:Author{authorId:$0})\n" +
-            "CALL apoc.path.spanningTree(a1,{minLevel:1,maxLevel:$1}) YIELD path\n" +
+            "CALL apoc.path.spanningTree(a1,{minLevel:1,maxLevel:$1,relationshipFilter:\"Collaboration\"}) YIELD path\n" +
             "WITH last(nodes(path)) as p,length(path) as numberOfHops\n" +
             "order by p.authorId\n" +
             "WITH numberOfHops, collect(p) as nodes\n" +

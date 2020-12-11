@@ -1,12 +1,11 @@
 package nju.oasis.serv.serviceImpl;
 
+import com.alibaba.fastjson.JSONArray;
 import lombok.extern.slf4j.Slf4j;
+import nju.oasis.serv.dao.AuthorCollaborationDAO;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.dao.AuthorNeo4jDAO;
-import nju.oasis.serv.domain.Article;
-import nju.oasis.serv.domain.CoAuthor;
-import nju.oasis.serv.domain.DAuthor;
-import nju.oasis.serv.domain.YDirection;
+import nju.oasis.serv.domain.*;
 import nju.oasis.serv.provider.CoAuthorProvider;
 import nju.oasis.serv.provider.DirectionYearProvider;
 import nju.oasis.serv.provider.MostCitedArticleProvider;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Resource
     AuthorDAO authorDAO;
+
+    @Resource
+    AuthorCollaborationDAO authorCollaborationDAO;
 
     @Autowired
     AuthorNeo4jDAO authorNeo4jDAO;
@@ -94,16 +97,52 @@ public class AuthorServiceImpl implements AuthorService {
             log.warn("[findRelationsById] authorId must be greater than 0!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
-        List<DAuthor>dAuthors = authorNeo4jDAO.findByAuthorId(id,maxLevel,numOfEachLayer);
-        if(dAuthors.size()<maxLevel){
-            log.warn("[findRelationsById] authorId:" + id + " may not have "+maxLevel+" layers!");
-            for(int i=dAuthors.size()+1;i<=maxLevel;i++){
-                dAuthors.add(new DAuthor(i));
+        else if(minLevel<maxLevel){
+            log.warn("[findRelationsById] minLevel is greater than maxLevel!");
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
+        }
+        try {
+            List<DAuthor> dAuthors = authorNeo4jDAO.findByAuthorId(id, maxLevel, numOfEachLayer);
+            if (dAuthors.size() < maxLevel) {
+                log.warn("[findRelationsById] authorId:" + id + " may not have " + maxLevel + " layers!");
+                for (int i = dAuthors.size() + 1; i <= maxLevel; i++) {
+                    dAuthors.add(new DAuthor(i));
+                }
             }
+            for (int i = dAuthors.size() - maxLevel + minLevel; i > 1; i--) {
+                dAuthors.remove(0);
+            }
+            return ResponseVO.output(ResultCode.SUCCESS,dAuthors);
+        }catch (Exception e){
+            log.error("[findRelationsById] authorId:"+id+"get "+e.getMessage());
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
-        for(int i=dAuthors.size()-maxLevel+minLevel;i>1;i--){
-            dAuthors.remove(0);
-        }
-        return ResponseVO.output(ResultCode.SUCCESS,dAuthors);
+
     }
+
+    @Override
+    public ResponseVO findPredictionsById(long id,Double minDistance,Double maxDistance,int maxNum){
+        if(id<=0){
+            log.warn("[findPredictionsById] authorId must be greater than 0!");
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
+        }
+        else if(maxDistance<minDistance){
+            log.warn("[findPredictionsById] minDistance is greater than maxDistance!");
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
+        }
+        try {
+            List<AuthorCollaboration> authorCollaborations = authorCollaborationDAO.
+                    findAuthorCollaborationByAuthorId(id, minDistance, maxDistance, maxNum);
+            authorCollaborations.forEach(authorCollaboration -> {
+                List<String> directionList = JSONArray.parseArray(authorCollaboration.getDirections(), String.class);
+                authorCollaboration.setDirectionList(directionList);
+            });
+            return ResponseVO.output(ResultCode.SUCCESS, authorCollaborations);
+        }catch (Exception e){
+            log.error("[findPredictionsById] authorId:"+id+"get "+e.getMessage());
+            return ResponseVO.output(ResultCode.PARAM_ERROR,null);
+        }
+    }
+
+
 }

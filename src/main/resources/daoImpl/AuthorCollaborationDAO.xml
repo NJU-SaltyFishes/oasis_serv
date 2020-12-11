@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nju.oasis.serv.dao.AuthorCollaborationDAO">
+
+
+    <select id="findAuthorCollaborationByAuthorId" resultMap="AuthorCollaboration">
+        SELECT start_id,end_id,distance,predict_collaboration
+        FROM author_collaboration
+        WHERE start_id=#{authorId} AND distance &gt;= #{minDistance} AND distance &lt;= #{maxDistance}
+        ORDER BY distance
+        LIMIT #{maxNum}
+    </select>
+
+
+    <resultMap id="AuthorCollaboration" type="nju.oasis.serv.domain.AuthorCollaboration">
+        <result column="start_id" property="startId"></result>
+        <result column="end_id" property="endId"></result>
+        <result column="distance" property="distance"></result>
+        <result column="predict_collaboration" property="directions"></result>
+    </resultMap>
+</mapper>
