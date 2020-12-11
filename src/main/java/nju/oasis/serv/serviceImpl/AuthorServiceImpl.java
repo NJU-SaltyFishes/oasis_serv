@@ -11,6 +11,7 @@ import nju.oasis.serv.provider.DirectionYearProvider;
 import nju.oasis.serv.provider.MostCitedArticleProvider;
 import nju.oasis.serv.provider.Pipeline;
 import nju.oasis.serv.service.AuthorService;
+import nju.oasis.serv.vo.AuthorCollaborationVO;
 import nju.oasis.serv.vo.AuthorRequestForm;
 import nju.oasis.serv.vo.ResponseVO;
 import nju.oasis.serv.vo.ResultCode;
@@ -131,13 +132,16 @@ public class AuthorServiceImpl implements AuthorService {
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
         try {
+            List<AuthorCollaborationVO>authorCollaborationVOS = new ArrayList<>();
             List<AuthorCollaboration> authorCollaborations = authorCollaborationDAO.
                     findAuthorCollaborationByAuthorId(id, minDistance, maxDistance, maxNum);
             authorCollaborations.forEach(authorCollaboration -> {
                 List<String> directionList = JSONArray.parseArray(authorCollaboration.getDirections(), String.class);
                 authorCollaboration.setDirectionList(directionList);
+                AuthorCollaborationVO authorCollaborationVO = new AuthorCollaborationVO(authorCollaboration);
+                authorCollaborationVOS.add(authorCollaborationVO);
             });
-            return ResponseVO.output(ResultCode.SUCCESS, authorCollaborations);
+            return ResponseVO.output(ResultCode.SUCCESS, authorCollaborationVOS);
         }catch (Exception e){
             log.error("[findPredictionsById] authorId:"+id+"get "+e.getMessage());
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
