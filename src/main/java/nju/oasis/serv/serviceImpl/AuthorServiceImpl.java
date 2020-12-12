@@ -98,7 +98,7 @@ public class AuthorServiceImpl implements AuthorService {
             log.warn("[findRelationsById] authorId must be greater than 0!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
-        else if(minLevel<maxLevel){
+        else if(minLevel>maxLevel){
             log.warn("[findRelationsById] minLevel is greater than maxLevel!");
             return ResponseVO.output(ResultCode.PARAM_ERROR,null);
         }
