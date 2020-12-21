@@ -15,6 +15,7 @@ spring:
   redis:
     host: 39.106.227.22
     port: 6379
+    password: docker@redis.com11037
   data:
     neo4j:
       uri: bolt://152.136.140.52:7687
