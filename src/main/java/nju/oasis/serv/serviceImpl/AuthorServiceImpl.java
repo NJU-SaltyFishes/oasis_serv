@@ -6,10 +6,7 @@ import nju.oasis.serv.dao.AuthorCollaborationDAO;
 import nju.oasis.serv.dao.AuthorDAO;
 import nju.oasis.serv.dao.AuthorNeo4jDAO;
 import nju.oasis.serv.domain.*;
-import nju.oasis.serv.provider.CoAuthorProvider;
-import nju.oasis.serv.provider.DirectionYearProvider;
-import nju.oasis.serv.provider.MostCitedArticleProvider;
-import nju.oasis.serv.provider.Pipeline;
+import nju.oasis.serv.provider.*;
 import nju.oasis.serv.service.AuthorService;
 import nju.oasis.serv.vo.AuthorCollaborationVO;
 import nju.oasis.serv.vo.AuthorRequestForm;
@@ -63,7 +60,9 @@ public class AuthorServiceImpl implements AuthorService {
         DirectionYearProvider directionYearProvider = new DirectionYearProvider(
                 authorDAO,authorRequestForm.getAuthorId()
         );
-        pipeline.addProviderAsGroup(mostCitedArticleProvider,coAuthorProvider,directionYearProvider);
+        PredictDirectionProvider predictDirectionProvider = new
+                PredictDirectionProvider(authorDAO,authorRequestForm.getAuthorId());
+        pipeline.addProviderAsGroup(mostCitedArticleProvider,coAuthorProvider,directionYearProvider,predictDirectionProvider);
         pipeline.doPipeline();
         ConcurrentHashMap<String, Object> concurrentHashMap = pipeline.getContextData();
         if(!concurrentHashMap.containsKey("mostCitedArticle")){
@@ -88,6 +87,12 @@ public class AuthorServiceImpl implements AuthorService {
         else{
             List<YDirection>yDirections = (List)concurrentHashMap.get("directions");
             result.put("directionYear",yDirections);
+        }
+        if(!concurrentHashMap.containsKey("predictDirection")){
+            log.warn("[findById] author:"+authorRequestForm.getAuthorId()+" doesn't have predict direction!");
+        }
+        else{
+            result.put("predictDirection",concurrentHashMap.get("predictDirection"));
         }
         return ResponseVO.output(ResultCode.SUCCESS,result);
     }

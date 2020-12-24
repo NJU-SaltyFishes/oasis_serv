@@ -33,6 +33,11 @@
         order by year
     </select>
 
+    <select id="getPredictDirection" resultType="java.lang.String">
+        SELECT predict_direction FROM author
+        where id = #{authorId}
+    </select>
+
     <resultMap id="YDirection" type="nju.oasis.serv.domain.YDirection">
         <result column="year" property="year"></result>
         <result column="directions" property="directions"></result>
