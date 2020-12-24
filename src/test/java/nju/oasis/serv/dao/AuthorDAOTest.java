@@ -67,4 +67,23 @@ class AuthorDAOTest extends OasisServApplicationTests {
         List<YDirection>yDirections = authorDAO.findDirectionYear(authorId);
         assertEquals(0,yDirections.size());
     }
+
+    @Test
+    void getPredictDirection(){
+        long authorId = 1;
+        assertEquals("dynamic time warping",authorDAO.getPredictDirection(authorId));
+
+    }
+
+    @Test
+    void getPredictDirection1(){
+        long authorId = 89;
+        assertNull(authorDAO.getPredictDirection(authorId));
+    }
+
+    @Test
+    void getPredictDirection2(){
+        long authorId = 1000000000;
+        assertNull(authorDAO.getPredictDirection(authorId));
+    }
 }

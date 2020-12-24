@@ -32,4 +32,6 @@ public interface AuthorDAO {
      * @return
      */
     List<YDirection>findDirectionYear(Long authorId);
+
+    String getPredictDirection(Long authorId);
 }
