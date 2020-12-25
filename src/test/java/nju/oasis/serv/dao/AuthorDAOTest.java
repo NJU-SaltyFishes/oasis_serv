@@ -78,7 +78,7 @@ class AuthorDAOTest extends OasisServApplicationTests {
     @Test
     void getPredictDirection1(){
         long authorId = 89;
-        assertNull(authorDAO.getPredictDirection(authorId));
+        assertEquals("Artificial intelligence",authorDAO.getPredictDirection(authorId));
     }
 
     @Test
