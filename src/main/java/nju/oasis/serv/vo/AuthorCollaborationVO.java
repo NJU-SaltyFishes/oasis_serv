@@ -13,6 +13,8 @@ public class AuthorCollaborationVO {
 
     private long endId;
 
+    private String endName;
+
     private double distance;
 
     private List<String> directions;
@@ -20,6 +22,7 @@ public class AuthorCollaborationVO {
     public AuthorCollaborationVO(AuthorCollaboration authorCollaboration){
         this.startId = authorCollaboration.getStartId();
         this.endId = authorCollaboration.getEndId();
+        this.endName = authorCollaboration.getEndName();
         this.distance = authorCollaboration.getDistance();
         this.directions = authorCollaboration.getDirectionList();
     }

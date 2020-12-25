@@ -20,6 +20,7 @@ class AuthorCollaborationDAOTest extends OasisServApplicationTests {
 
         long startId = 1;
         long endId = 42407;
+        String endName = "Artūras Serackis";
         double distance = 0.7;
         String directions = "[\"dynamic time warping\", \"search optimisation\", \"Speech recognition\"]";
 
@@ -27,10 +28,10 @@ class AuthorCollaborationDAOTest extends OasisServApplicationTests {
                 authorCollaborationDAO.findAuthorCollaborationByAuthorId(startId,0.7,0.8,15);
         assertNotNull(authorCollaborations);
         assertEquals(1,authorCollaborations.size());
-
         AuthorCollaboration authorCollaboration = authorCollaborations.get(0);
         assertEquals(startId,authorCollaboration.getStartId());
         assertEquals(endId,authorCollaboration.getEndId());
+        assertEquals(endName,authorCollaboration.getEndName());
         assertEquals(distance,authorCollaboration.getDistance());
         assertEquals(directions,authorCollaboration.getDirections());
 

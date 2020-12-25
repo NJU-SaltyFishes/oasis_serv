@@ -14,6 +14,8 @@ public class AuthorCollaboration {
 
     private long endId;
 
+    private String endName;
+
     private double distance;
 
     private String directions;
