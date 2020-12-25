@@ -4,7 +4,7 @@
 
 
     <select id="findAuthorCollaborationByAuthorId" resultMap="AuthorCollaboration">
-        SELECT start_id,end_id,distance,predict_collaboration
+        SELECT start_id,end_id,end_name,distance,predict_collaboration
         FROM author_collaboration
         WHERE start_id=#{authorId} AND distance &gt;= #{minDistance} AND distance &lt;= #{maxDistance}
         ORDER BY distance
@@ -15,6 +15,7 @@
     <resultMap id="AuthorCollaboration" type="nju.oasis.serv.domain.AuthorCollaboration">
         <result column="start_id" property="startId"></result>
         <result column="end_id" property="endId"></result>
+        <result column="end_name" property="endName"></result>
         <result column="distance" property="distance"></result>
         <result column="predict_collaboration" property="directions"></result>
     </resultMap>
